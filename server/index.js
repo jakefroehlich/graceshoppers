@@ -20,7 +20,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const findUserBySession = (sessionId) =>
-  User.findOne({
+  models.User.findOne({
     include: [
       {
         model: Session,
@@ -32,7 +32,7 @@ const findUserBySession = (sessionId) =>
   });
 app.use(async (req, res, next) => {
   if (!req.cookies.session_id) {
-    const session = await Session.create();
+    const session = await models.Session.create();
     const oneWeek = 1000 * 60 * 60 * 24 * 7;
     res.cookie("session_id", session.id, {
       path: "/",
@@ -53,7 +53,6 @@ app.use(async (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.static(path.join(__dirname, "../dist")));
-app.use(express.static(path.join(__dirname, '../assets')));
 
 app.use('/api/products', productRouter)
 app.use('/api/users', userRouter)
